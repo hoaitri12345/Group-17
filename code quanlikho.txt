@@ -1,0 +1,60 @@
+public class Service : System.Web.Services.WebService
+{
+    public Service () {
+
+        //Uncomment the following line if using designed components 
+        //InitializeComponent(); 
+    }
+
+    private MySqlConnection con = null;
+    private MySqlConnection getConnection()
+    {
+        MySqlConnection con = new MySqlConnection("Server=localhost;Database=csdl;Port=3306;User ID=root;Password");
+        return con;
+    }
+    private DataSet getTable(string sql)
+    {
+        MySqlConnection con = getConnection();
+        MysqlDataAdapter da = new MysqlDataAdapter(sql, con);
+        DataSet dt = new DataSet();
+        da.Fill(dt);
+        return dt;
+    }
+    private void ExcutenonQuery(string sql)
+    {
+        MySqlConnection con = getConnection();
+        con.Open();
+        MySqlCommand cmd = new MySqlCommand(sql, con);
+        cmd.ExecuteNonQuery();
+        cmd.Dispose();
+        con.Close();
+    }
+    [WebMethod]
+    public DataSet hienthi()
+    {
+        string sql = "select *from sinhvien";
+        return getTable(sql);
+
+    }
+    [WebMeThod]
+
+    public string HelloWorld()
+    {
+        return "Hello World";
+    }
+    [WebMeThod]
+    public void them(string idH, string TenH, string LoaiH, string SoLuong, string DonGia, string GhiChu)
+    {
+        string sql = "insert into sinhvien values('" + idH + "','" + TenH + "','" + LoaiH + "','" + SoLuong + "','" + DonGia + "','" + GhiChu + "')";
+            ExcutenonQuery(sql);
+    }
+    public void sua(string idH, string TenH, string LoaiH, string SoLuong, string DonGia, string GhiChu)
+    {
+        string sql = "update quanlykho set idH='" + idH + "',TenH='" + TenH + "',LoaiH='" + LoaiH + "',Soluong='" + SoLuong + "',DonGia='" + DonGia + "',GhiChu='" + GhiChu + "' where idH='" + idH + "'";
+        ExcutenonQuery(sql);
+    }
+    public void xoa(string TenH)
+
+        string sql = "detele from quanlykho where id= '" + TenH + "'";
+      ExcutenonQuery(sql);
+}
